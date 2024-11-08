@@ -1,0 +1,69 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Business {
+  id          Int      @id @default(autoincrement())
+  public_id   String   @unique @default(uuid())
+  name        String   @db.VarChar(255)
+  type_doc    TypeDoc
+  doc         String   @unique @db.Char(14)
+  address     String   @db.VarChar(255)
+  city        String   @db.VarChar(255)
+  uf          String   @db.Char(2)
+  postal_code String   @db.Char(8)
+  instagram   String?  @db.VarChar(255)
+  facebook    String?  @db.VarChar(255)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  email       String   @unique
+  password    String   @db.VarChar(255)
+  logo        String?  @db.VarChar(255)
+
+  phones Phone[]
+
+  @@map("Business")
+}
+
+model Phone {
+  id           Int      @id @default(autoincrement())
+  user_type    UserType
+  user_id      Int
+  phone_number String   @unique @db.VarChar(255)
+
+  business Business? @relation(fields: [user_id], references: [id], map: "fk_phone_business")
+  worker   Worker?   @relation(fields: [user_id], references: [id], map: "fk_phone_worker")
+
+  @@map("Phone")
+}
+
+model Worker {
+  id           Int       @id @default(autoincrement())
+  full_name    String    @db.VarChar(255)
+  cpf          String    @unique @db.Char(11)
+  email        String    @unique @db.VarChar(255)
+  birth_date   DateTime
+  created_at   DateTime  @default(now())
+  access_token Int?
+  expires_in   DateTime?
+  dismissed_in DateTime?
+
+  phones Phone[]
+
+  @@map("Worker")
+}
+
+enum TypeDoc {
+  CPF
+  CNPJ
+}
+
+enum UserType {
+  business
+  worker
+}
