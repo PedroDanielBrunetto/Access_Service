@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
-import AppError from "../../errors/AppError";
+import AppError from "@/shared/errors/AppError";
 
 const errorMiddleware: ErrorRequestHandler = (
   error,

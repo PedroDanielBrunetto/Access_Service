@@ -1,14 +1,8 @@
 import { Router } from "express";
-import AppError from "../../errors/AppError";
+import accountsRouter from "@/modules/business/routes/accounts.routes";
 
 const routes = Router();
 
-routes.get("/test-error", (req, res, next) => {
-  try {
-    throw new AppError("Simulação de erro!", 500);
-  } catch (error) {
-    next(error);
-  }
-});
+routes.use("/business", accountsRouter);
 
 export default routes;
