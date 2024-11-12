@@ -16,7 +16,7 @@ const businessSchema = z.object({
   password: z.string().min(6),
 });
 
-export function validateBusiness(
+export function validateCreateBusinessAccount(
   req: Request,
   res: Response,
   next: NextFunction
