@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import CreateAccountBusinessService from "../services/CreateAccountBusinessService";
-import { ICreateAccountRequest } from "../interfaces/ICreateAccountRequest";
-import { IUpdateAccountRequest } from "../interfaces/IUpdateAccountRequest";
+import { ICreateBusinessAccountRequest } from "../interfaces/ICreateBusinessAccountRequest";
+import { IUpdateBusinessAccountRequest } from "../interfaces/IUpdateBusinessAccountRequest";
 import UpdateAccountBusinessService from "../services/UpdateAccountBusinessService";
 
-export default class AccountsController {
+export default class BusinessAccountsController {
   public async create(request: Request, response: Response): Promise<void> {
     const createAccountBusiness = new CreateAccountBusinessService();
 
     const business = await createAccountBusiness.execute(
-      request.body as ICreateAccountRequest
+      request.body as ICreateBusinessAccountRequest
     );
 
     response.json(business);
@@ -19,7 +19,7 @@ export default class AccountsController {
     const updateAccountBusiness = new UpdateAccountBusinessService();
 
     const business = await updateAccountBusiness.execute(
-      request.body as IUpdateAccountRequest
+      request.body as IUpdateBusinessAccountRequest
     );
 
     response.json(business);

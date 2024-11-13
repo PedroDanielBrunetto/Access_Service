@@ -1,7 +1,7 @@
 import { PrismaClient, Business } from "@prisma/client";
 import AppError from "@/shared/errors/AppError";
 import { compare, hash } from "bcrypt";
-import { IUpdateAccountRequest } from "../interfaces/IUpdateAccountRequest";
+import { IUpdateBusinessAccountRequest } from "../interfaces/IUpdateBusinessAccountRequest";
 
 const prisma = new PrismaClient();
 
@@ -9,16 +9,14 @@ class UpdateAccountBusinessService {
   public async execute({
     public_id,
     ...data
-  }: IUpdateAccountRequest): Promise<
-    Omit<Business, "id" | "password" | "logo">
+  }: IUpdateBusinessAccountRequest): Promise<
+    Omit<Business, "id" | "password" | "logo" | "token">
   > {
     const business = await prisma.business.findUnique({
       where: { public_id },
     });
 
-    if (!business) {
-      throw new AppError("Usuário não encontrado", 404);
-    }
+    if (!business) throw new AppError("Usuário não encontrado", 404);
 
     const conflictingUser = await prisma.business.findFirst({
       where: {
@@ -34,9 +32,8 @@ class UpdateAccountBusinessService {
       },
     });
 
-    if (conflictingUser) {
+    if (conflictingUser)
       throw new AppError("Email ou Documento já existente", 400);
-    }
 
     if (data.password && data.oldPassword) {
       const checkOldPassword = await compare(
@@ -44,9 +41,7 @@ class UpdateAccountBusinessService {
         business.password
       );
 
-      if (!checkOldPassword) {
-        throw new AppError("Old password does not match");
-      }
+      if (!checkOldPassword) throw new AppError("Old password does not match");
 
       data.password = await hash(data.password, 10);
     } else delete data.password;

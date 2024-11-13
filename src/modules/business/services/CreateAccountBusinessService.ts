@@ -1,14 +1,14 @@
 import { PrismaClient, Business } from "@prisma/client";
 import AppError from "@/shared/errors/AppError";
 import { hash } from "bcrypt";
-import { ICreateAccountRequest } from "../interfaces/ICreateAccountRequest";
+import { ICreateBusinessAccountRequest } from "../interfaces/ICreateBusinessAccountRequest";
 
 const prisma = new PrismaClient();
 
 class CreateAccountBusinessService {
   public async execute(
-    data: ICreateAccountRequest
-  ): Promise<Omit<Business, "id" | "password" | "logo" | "updated_at">> {
+    data: ICreateBusinessAccountRequest
+  ): Promise<Omit<Business, "id" | "password" | "logo" | "updated_at" | "token">> {
     const userExists = await prisma.business.findFirst({
       where: {
         OR: [
