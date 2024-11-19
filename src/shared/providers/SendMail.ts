@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer";
-import aws from "aws-sdk";
 import HandleBarsMailTemplate from "@/config/mail/HandleBarsMailTemplate";
 import mailConfig from "@/config/mail/Mail";
 
@@ -24,7 +23,7 @@ interface ISendMail {
   templateData: IParseMailTemplate;
 }
 
-export default class SESMail {
+export default class SendMail {
   static async sendMail({
     to,
     from,
@@ -34,9 +33,13 @@ export default class SESMail {
     const mailTemplate = new HandleBarsMailTemplate();
 
     const transporter = nodemailer.createTransport({
-      SES: new aws.SES({
-        apiVersion: process.env.API_VERSION,
-      }),
+      host: process.env.MAIL_HOST,
+      port: Number(process.env.MAIL_PORT),
+      secure: false,
+      auth: {
+        user: process.env.DEFAULT_FROM_EMAIL,
+        pass: process.env.DEFAULT_PASS_EMAIL,
+      }
     });
 
     const { email, name } = mailConfig.defaults.from;

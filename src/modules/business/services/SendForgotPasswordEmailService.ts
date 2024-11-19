@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import path from "path";
 import { ISendForgotPasswordEmailRequest } from "../interfaces/ISendForgotPasswordEmailRequest";
 import { generateToken } from "@/shared/utils/generateToken";
-import SESMail from "@/shared/providers/SESMail";
+import SendMail from "@/shared/providers/SendMail";
 
 const prisma = new PrismaClient();
 
@@ -34,7 +34,7 @@ class SendForgotPasswordEmailService {
       "Forgot_password.hbs"
     );
 
-    await SESMail.sendMail({
+    await SendMail.sendMail({
       to: {
         name: business.name,
         email: business.email,
