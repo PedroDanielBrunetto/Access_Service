@@ -1,15 +1,16 @@
 import { PrismaClient, Business } from "@prisma/client";
 import AppError from "@/shared/errors/AppError";
-import { compare, hash } from "bcrypt";
-import { IUpdateBusinessAccountRequest } from "../interfaces/IUpdateBusinessAccountRequest";
+import { hash } from "bcrypt";
+import { IUpdateForgotPasswordRequest } from "../interfaces/IUpdateForgotPasswordRequest";
 
 const prisma = new PrismaClient();
 
-class UpdateAccountBusinessService {
+class UpdateForgotPasswordService {
   public async execute({
     public_id,
-    ...data
-  }: IUpdateBusinessAccountRequest): Promise<
+    password,
+    token,
+  }: IUpdateForgotPasswordRequest): Promise<
     Omit<Business, "id" | "password" | "logo" | "token">
   > {
     const business = await prisma.business.findUnique({
@@ -18,35 +19,16 @@ class UpdateAccountBusinessService {
 
     if (!business) throw new AppError("Usuário não encontrado", 404);
 
-    const conflictingUser = await prisma.business.findFirst({
-      where: {
-        OR: [
-          { AND: [{ type_doc: data.type_doc }, { doc: data.doc }] },
-          { email: data.email },
-        ],
-      },
-    });
+    if (business.token !== token) throw new AppError("Token inválido", 401);
 
-    if (conflictingUser)
-      throw new AppError("Email ou Documento já existente", 400);
-
-    if (data.password && data.oldPassword) {
-      const checkOldPassword = await compare(
-        data.oldPassword,
-        business.password
-      );
-
-      if (!checkOldPassword) throw new AppError("Old password does not match");
-
-      data.password = await hash(data.password, 10);
-    } else delete data.password;
-
-    delete data.oldPassword;
+    if (password) {
+      password = await hash(password, 10);
+    } else throw new AppError("A senha não pode ser vazia", 400);
 
     const updatedBusiness = await prisma.business.update({
       where: { public_id },
       data: {
-        ...data,
+        password,
         updated_at: new Date(),
       },
     });
@@ -71,4 +53,4 @@ class UpdateAccountBusinessService {
   }
 }
 
-export default UpdateAccountBusinessService;
+export default UpdateForgotPasswordService;
