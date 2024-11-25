@@ -1,7 +1,7 @@
 import AppError from "@/shared/errors/AppError";
 import { PrismaClient } from "@prisma/client";
 import path from "path";
-import { ISendForgotPasswordEmailRequest } from "../interfaces/ISendForgotPasswordEmailRequest";
+import { ISendForgotPasswordEmailRequest } from "../interfaces/req/ISendForgotPasswordEmailRequest";
 import { generateToken } from "@/shared/utils/generateToken";
 import SendMail from "@/shared/providers/SendMail";
 

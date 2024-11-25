@@ -1,10 +1,10 @@
 import { Router } from "express";
-import ResetPasswordController from "../controllers/ResetPasswordController";
+import BusinessResetPasswordController from "../controllers/BusinessResetPasswordController";
 import { validateForgotPassword } from "../validation/SendForgotPasswordSchema";
 import { validateUpdatePassword } from "../validation/UpdateForgotPasswordSchema";
 
 const resetPasswordRouter = Router();
-const resetController = new ResetPasswordController();
+const resetController = new BusinessResetPasswordController();
 
 resetPasswordRouter.post("/", validateForgotPassword, (req, res, next) => {
   resetController.forgot(req, res).catch(next);

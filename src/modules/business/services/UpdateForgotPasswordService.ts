@@ -1,7 +1,7 @@
 import { PrismaClient, Business } from "@prisma/client";
 import AppError from "@/shared/errors/AppError";
 import { hash } from "bcrypt";
-import { IUpdateForgotPasswordRequest } from "../interfaces/IUpdateForgotPasswordRequest";
+import { IUpdateForgotPasswordRequest } from "../interfaces/req/IUpdateForgotPasswordRequest";
 
 const prisma = new PrismaClient();
 

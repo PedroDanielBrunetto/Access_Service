@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import SendForgotPasswordEmailService from "../services/SendForgotPasswordEmailService";
 import UpdateForgotPasswordService from "../services/UpdateForgotPasswordService";
-import { ISendForgotPasswordEmailRequest } from "../interfaces/ISendForgotPasswordEmailRequest";
-import { IUpdateForgotPasswordRequest } from "../interfaces/IUpdateForgotPasswordRequest";
+import { ISendForgotPasswordEmailRequest } from "../interfaces/req/ISendForgotPasswordEmailRequest";
+import { IUpdateForgotPasswordRequest } from "../interfaces/req/IUpdateForgotPasswordRequest";
 
-export default class ResetPasswordController {
+export default class BusinessResetPasswordController {
   public async forgot(request: Request, response: Response): Promise<void> {
     const sendForgotPassword = new SendForgotPasswordEmailService();
 

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import CreateAccountBusinessService from "../services/CreateAccountBusinessService";
-import { ICreateBusinessAccountRequest } from "../interfaces/ICreateBusinessAccountRequest";
-import { IUpdateBusinessAccountRequest } from "../interfaces/IUpdateBusinessAccountRequest";
+import { ICreateBusinessAccountRequest } from "../interfaces/req/ICreateBusinessAccountRequest";
+import { IUpdateBusinessAccountRequest } from "../interfaces/req/IUpdateBusinessAccountRequest";
 import UpdateAccountBusinessService from "../services/UpdateAccountBusinessService";
 
 export default class BusinessAccountsController {
