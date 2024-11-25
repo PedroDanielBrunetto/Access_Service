@@ -3,6 +3,8 @@ import CreateAccountBusinessService from "../services/CreateAccountBusinessServi
 import { ICreateBusinessAccountRequest } from "../interfaces/req/ICreateBusinessAccountRequest";
 import { IUpdateBusinessAccountRequest } from "../interfaces/req/IUpdateBusinessAccountRequest";
 import UpdateAccountBusinessService from "../services/UpdateAccountBusinessService";
+import DisableAccountBusinessService from "../services/DisableAccountBusinessService";
+import EnableAccountBusinessService from "../services/EnableAccountBusinessService";
 
 export default class BusinessAccountsController {
   public async create(request: Request, response: Response): Promise<void> {
@@ -23,5 +25,31 @@ export default class BusinessAccountsController {
     );
 
     response.json(business);
+  }
+
+  public async disable(request: Request, response: Response): Promise<void> {
+    const { public_id } = request.body;
+
+    const disableAccountBusiness = new DisableAccountBusinessService();
+
+    await disableAccountBusiness.execute(public_id);
+
+    response.json({
+      statusAccount: false,
+      message: "Conta desativada",
+    });
+  }
+
+  public async enable(request: Request, response: Response): Promise<void> {
+    const { public_id } = request.body;
+
+    const enableAccountBusiness = new EnableAccountBusinessService();
+
+    await enableAccountBusiness.execute(public_id);
+
+    response.json({
+      statusAccount: true,
+      message: "Conta ativada",
+    });
   }
 }

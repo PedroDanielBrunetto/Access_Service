@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 class CreateAccountBusinessService {
   public async execute(
     data: ICreateBusinessAccountRequest
-  ): Promise<Omit<Business, "id" | "password" | "logo" | "updated_at" | "token">> {
+  ): Promise<Omit<Business, "id" | "password" | "logo" | "updated_at" | "token" | "status">> {
     const userExists = await prisma.business.findFirst({
       where: {
         OR: [

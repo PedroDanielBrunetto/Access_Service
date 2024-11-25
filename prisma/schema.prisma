@@ -25,6 +25,7 @@ model Business {
   password    String   @db.VarChar(255)
   logo        String?  @db.VarChar(255)
   token       String?  @db.Char(6)
+  status      Boolean  @default(true)
 
   phones Phone[]
 

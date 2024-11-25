@@ -19,6 +19,8 @@ class CreateSessionBusinessService {
 
     if (!business) throw new AppError("Usuário não encontrado", 404);
 
+    if (!business.status) throw new AppError("Conta não ativada", 401);
+
     if (!(await compare(password, business.password)))
       throw new AppError("Senha inválida", 401);
 

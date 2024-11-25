@@ -10,7 +10,7 @@ class UpdateAccountBusinessService {
     public_id,
     ...data
   }: IUpdateBusinessAccountRequest): Promise<
-    Omit<Business, "id" | "password" | "logo" | "token">
+    Omit<Business, "id" | "password" | "logo" | "token" | "status">
   > {
     const business = await prisma.business.findUnique({
       where: { public_id },
