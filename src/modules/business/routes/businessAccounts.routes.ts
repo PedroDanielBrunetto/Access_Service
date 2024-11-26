@@ -4,6 +4,7 @@ import { validateCreateBusinessAccount } from "../validation/CreateAccountBusine
 import { validateUpdateBusinessAccount } from "../validation/UpdateAccountBusinessSchema";
 import isAuthenticated from "@/shared/http/middlewares/isAuthenticated";
 import { validateStatusBusinessAccount } from "../validation/StatusAccountBusinessSchema";
+import upload from "@/shared/http/middlewares/uploadMiddleware";
 
 const businessAccountsRouter = Router();
 const accountController = new BusinessAccountsController();
@@ -36,6 +37,13 @@ businessAccountsRouter.patch(
   validateStatusBusinessAccount,
   (req, res, next) => {
     accountController.enable(req, res).catch(next);
+  }
+);
+businessAccountsRouter.post(
+  "/:id/avatar",
+  upload.single("avatar"),
+  (req, res, next) => {
+    accountController.avatar(req, res).catch(next);
   }
 );
 

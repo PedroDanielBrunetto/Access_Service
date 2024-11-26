@@ -4,7 +4,10 @@ declare namespace Express {
       id: string;
     };
     file: {
-      filename: string;
+      mimetype: string;
+      originalname: string;
+      buffer: Buffer;
+      filename?: string;
     };
   }
 }

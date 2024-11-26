@@ -5,6 +5,8 @@ import { IUpdateBusinessAccountRequest } from "../interfaces/req/IUpdateBusiness
 import UpdateAccountBusinessService from "../services/UpdateAccountBusinessService";
 import DisableAccountBusinessService from "../services/DisableAccountBusinessService";
 import EnableAccountBusinessService from "../services/EnableAccountBusinessService";
+import { UpdateAvatarBusinessService } from "../services/UpdateAvatarBusinessService";
+import AppError from "@/shared/errors/AppError";
 
 export default class BusinessAccountsController {
   public async create(request: Request, response: Response): Promise<void> {
@@ -51,5 +53,30 @@ export default class BusinessAccountsController {
       statusAccount: true,
       message: "Conta ativada",
     });
+  }
+
+  public async avatar(req: Request, res: Response): Promise<Response> {
+    const { id: public_id } = req.params;
+    const avatarFile = req.file?.buffer;
+    const fileName = req.file?.originalname;
+    const contentType = req.file?.mimetype;
+
+    if (!avatarFile || !fileName || !contentType)
+      throw new AppError("Arquivo obrigatório.", 400);
+
+    const service = new UpdateAvatarBusinessService();
+
+    try {
+      const avatarUrl = await service.execute({
+        public_id,
+        avatarFile,
+        fileName,
+        contentType,
+      });
+
+      return res.json({ avatarUrl });
+    } catch (error: any) {
+      throw new AppError(error.message, 400);
+    }
   }
 }
