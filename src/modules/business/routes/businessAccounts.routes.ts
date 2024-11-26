@@ -3,7 +3,7 @@ import BusinessAccountsController from "../controllers/BusinessAccountsControlle
 import { validateCreateBusinessAccount } from "../validation/CreateAccountBusinessSchema";
 import { validateUpdateBusinessAccount } from "../validation/UpdateAccountBusinessSchema";
 import isAuthenticated from "@/shared/http/middlewares/isAuthenticated";
-import { validateStatusBusinessAccount } from "../validation/DisableAccountBusinessSchema";
+import { validateStatusBusinessAccount } from "../validation/StatusAccountBusinessSchema";
 
 const businessAccountsRouter = Router();
 const accountController = new BusinessAccountsController();
