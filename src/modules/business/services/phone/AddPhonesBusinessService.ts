@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import AppError from "@/shared/errors/AppError";
-import { IAddBusinessPhones } from "../interfaces/req/IAddBusinessPhones";
+import { IAddBusinessPhonesRequest } from "../../interfaces/req/IAddBusinessPhonesRequest";
 
 const prisma = new PrismaClient();
 
@@ -8,7 +8,7 @@ class AddPhonesBusinessService {
   public async execute({
     public_id,
     phone_number,
-  }: IAddBusinessPhones): Promise<void> {
+  }: IAddBusinessPhonesRequest): Promise<void> {
     const business = await prisma.business.findUnique({
       where: { public_id },
     });

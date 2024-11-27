@@ -2,8 +2,8 @@ import { PrismaClient } from "@prisma/client";
 import AppError from "@/shared/errors/AppError";
 import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
-import { ICreateBusinessSessionRequest } from "../interfaces/req/ICreateBusinessSessionRequest";
-import { ICreateBusinessSessionResponse } from "../interfaces/res/ICreateBusinessSessionResponse";
+import { ICreateSessionBusinessRequest } from "../../interfaces/req/ICreateSessionBusinessRequest";
+import { ICreateSessionBusinessResponse } from "../../interfaces/res/ICreateSessionBusinessResponse";
 import auth from "@/config/auth";
 
 const prisma = new PrismaClient();
@@ -12,7 +12,7 @@ class CreateSessionBusinessService {
   public async execute({
     email,
     password,
-  }: ICreateBusinessSessionRequest): Promise<ICreateBusinessSessionResponse> {
+  }: ICreateSessionBusinessRequest): Promise<ICreateSessionBusinessResponse> {
     const business = await prisma.business.findUnique({
       where: { email },
     });
@@ -33,7 +33,7 @@ class CreateSessionBusinessService {
       jwt: token,
       loggedAt: new Date(),
       public_id: business.public_id,
-    } as ICreateBusinessSessionResponse;
+    } as ICreateSessionBusinessResponse;
   }
 }
 

@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
-import SendForgotPasswordEmailService from "../services/SendForgotPasswordEmailService";
-import UpdateForgotPasswordService from "../services/UpdateForgotPasswordService";
+
+import SendForgotPasswordEmailService from "../services/forgotPassword/SendForgotPasswordEmailService";
+import UpdateForgotPasswordService from "../services/forgotPassword/UpdateForgotPasswordService";
+
 import { ISendForgotPasswordEmailRequest } from "../interfaces/req/ISendForgotPasswordEmailRequest";
 import { IUpdateForgotPasswordRequest } from "../interfaces/req/IUpdateForgotPasswordRequest";
 

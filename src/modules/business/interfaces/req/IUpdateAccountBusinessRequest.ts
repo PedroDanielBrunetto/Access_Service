@@ -1,6 +1,6 @@
 import { TypeDoc } from "@prisma/client";
 
-export interface IUpdateBusinessAccountRequest {
+export interface IUpdateAccountBusinessRequest {
   public_id: string;
   name?: string;
   type_doc?: TypeDoc;

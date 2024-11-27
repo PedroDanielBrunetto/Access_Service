@@ -1,21 +1,23 @@
 import { Request, Response } from "express";
-import CreateAccountBusinessService from "../services/CreateAccountBusinessService";
-import { ICreateBusinessAccountRequest } from "../interfaces/req/ICreateBusinessAccountRequest";
-import { IUpdateBusinessAccountRequest } from "../interfaces/req/IUpdateBusinessAccountRequest";
-import UpdateAccountBusinessService from "../services/UpdateAccountBusinessService";
-import DisableAccountBusinessService from "../services/DisableAccountBusinessService";
-import EnableAccountBusinessService from "../services/EnableAccountBusinessService";
-import { UpdateAvatarBusinessService } from "../services/UpdateAvatarBusinessService";
 import AppError from "@/shared/errors/AppError";
-import AddPhonesBusinessService from "../services/AddPhonesBusinessService";
-import { IAddBusinessPhones } from "../interfaces/req/IAddBusinessPhones";
+
+import CreateAccountBusinessService from "../services/account/CreateAccountBusinessService";
+import UpdateAccountBusinessService from "../services/account/UpdateAccountBusinessService";
+import DisableAccountBusinessService from "../services/account/DisableAccountBusinessService";
+import EnableAccountBusinessService from "../services/account/EnableAccountBusinessService";
+import { UpdateAvatarBusinessService } from "../services/avatar/UpdateAvatarBusinessService";
+import AddPhonesBusinessService from "../services/phone/AddPhonesBusinessService";
+
+import { ICreateAccountBusinessRequest } from "../interfaces/req/ICreateAccountBusinessRequest";
+import { IUpdateAccountBusinessRequest } from "../interfaces/req/IUpdateAccountBusinessRequest";
+import { IAddPhonesBusinessRequest } from "../interfaces/req/IAddPhonesBusinessRequest";
 
 export default class BusinessAccountsController {
   public async create(request: Request, response: Response): Promise<void> {
     const createAccountBusiness = new CreateAccountBusinessService();
 
     const business = await createAccountBusiness.execute(
-      request.body as ICreateBusinessAccountRequest
+      request.body as ICreateAccountBusinessRequest
     );
 
     response.json(business);
@@ -25,7 +27,7 @@ export default class BusinessAccountsController {
     const updateAccountBusiness = new UpdateAccountBusinessService();
 
     const business = await updateAccountBusiness.execute(
-      request.body as IUpdateBusinessAccountRequest
+      request.body as IUpdateAccountBusinessRequest
     );
 
     response.json(business);
@@ -34,9 +36,34 @@ export default class BusinessAccountsController {
   public async phones(request: Request, response: Response): Promise<void> {
     const addPhonesBusiness = new AddPhonesBusinessService();
 
-    await addPhonesBusiness.execute(request.body as IAddBusinessPhones);
+    await addPhonesBusiness.execute(request.body as IAddPhonesBusinessRequest);
 
     response.json("Números adicionados com sucesso.");
+  }
+
+  public async avatar(req: Request, res: Response): Promise<Response> {
+    const { id: public_id } = req.params;
+    const avatarFile = req.file?.buffer;
+    const fileName = req.file?.originalname;
+    const contentType = req.file?.mimetype;
+
+    if (!avatarFile || !fileName || !contentType)
+      throw new AppError("Arquivo obrigatório.", 400);
+
+    const service = new UpdateAvatarBusinessService();
+
+    try {
+      const avatarUrl = await service.execute({
+        public_id,
+        avatarFile,
+        fileName,
+        contentType,
+      });
+
+      return res.json({ avatarUrl });
+    } catch (error: any) {
+      throw new AppError(error.message, 400);
+    }
   }
 
   public async disable(request: Request, response: Response): Promise<void> {
@@ -63,30 +90,5 @@ export default class BusinessAccountsController {
       statusAccount: true,
       message: "Conta ativada",
     });
-  }
-
-  public async avatar(req: Request, res: Response): Promise<Response> {
-    const { id: public_id } = req.params;
-    const avatarFile = req.file?.buffer;
-    const fileName = req.file?.originalname;
-    const contentType = req.file?.mimetype;
-
-    if (!avatarFile || !fileName || !contentType)
-      throw new AppError("Arquivo obrigatório.", 400);
-
-    const service = new UpdateAvatarBusinessService();
-
-    try {
-      const avatarUrl = await service.execute({
-        public_id,
-        avatarFile,
-        fileName,
-        contentType,
-      });
-
-      return res.json({ avatarUrl });
-    } catch (error: any) {
-      throw new AppError(error.message, 400);
-    }
   }
 }

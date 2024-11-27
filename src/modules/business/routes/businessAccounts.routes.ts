@@ -1,15 +1,18 @@
 import { Router } from "express";
+import isAuthenticated from "@/shared/http/middlewares/isAuthenticated";
+import upload from "@/shared/http/middlewares/uploadMiddleware";
+
 import BusinessAccountsController from "../controllers/BusinessAccountsController";
+
 import { validateCreateBusinessAccount } from "../validation/CreateAccountBusinessSchema";
 import { validateUpdateBusinessAccount } from "../validation/UpdateAccountBusinessSchema";
-import isAuthenticated from "@/shared/http/middlewares/isAuthenticated";
 import { validateStatusBusinessAccount } from "../validation/StatusAccountBusinessSchema";
-import upload from "@/shared/http/middlewares/uploadMiddleware";
 import { validateAddPhones } from "../validation/AddBusinessPhonesSchema";
 
 const businessAccountsRouter = Router();
 const accountController = new BusinessAccountsController();
 
+// Create Business Account
 businessAccountsRouter.post(
   "/",
   validateCreateBusinessAccount,
@@ -17,6 +20,8 @@ businessAccountsRouter.post(
     accountController.create(req, res).catch(next);
   }
 );
+
+// Update Business Account
 businessAccountsRouter.put(
   "/",
   validateUpdateBusinessAccount,
@@ -25,6 +30,8 @@ businessAccountsRouter.put(
     accountController.update(req, res).catch(next);
   }
 );
+
+// Disable Business Account
 businessAccountsRouter.delete(
   "/",
   validateStatusBusinessAccount,
@@ -33,6 +40,8 @@ businessAccountsRouter.delete(
     accountController.disable(req, res).catch(next);
   }
 );
+
+// Enable Business Account
 businessAccountsRouter.patch(
   "/enable",
   validateStatusBusinessAccount,
@@ -40,6 +49,13 @@ businessAccountsRouter.patch(
     accountController.enable(req, res).catch(next);
   }
 );
+
+// Add Business Phones Number
+businessAccountsRouter.post("/phones", validateAddPhones, (req, res, next) => {
+  accountController.phones(req, res).catch(next);
+});
+
+// Update Avatar Business Account
 businessAccountsRouter.post(
   "/:id/avatar",
   upload.single("avatar"),
@@ -47,8 +63,5 @@ businessAccountsRouter.post(
     accountController.avatar(req, res).catch(next);
   }
 );
-businessAccountsRouter.post("/phones", validateAddPhones, (req, res, next) => {
-  accountController.phones(req, res).catch(next);
-});
 
 export default businessAccountsRouter;
