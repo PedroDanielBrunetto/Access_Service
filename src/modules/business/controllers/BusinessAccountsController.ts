@@ -7,6 +7,8 @@ import DisableAccountBusinessService from "../services/DisableAccountBusinessSer
 import EnableAccountBusinessService from "../services/EnableAccountBusinessService";
 import { UpdateAvatarBusinessService } from "../services/UpdateAvatarBusinessService";
 import AppError from "@/shared/errors/AppError";
+import AddPhonesBusinessService from "../services/AddPhonesBusinessService";
+import { IAddBusinessPhones } from "../interfaces/req/IAddBusinessPhones";
 
 export default class BusinessAccountsController {
   public async create(request: Request, response: Response): Promise<void> {
@@ -27,6 +29,14 @@ export default class BusinessAccountsController {
     );
 
     response.json(business);
+  }
+
+  public async phones(request: Request, response: Response): Promise<void> {
+    const addPhonesBusiness = new AddPhonesBusinessService();
+
+    await addPhonesBusiness.execute(request.body as IAddBusinessPhones);
+
+    response.json("Números adicionados com sucesso.");
   }
 
   public async disable(request: Request, response: Response): Promise<void> {

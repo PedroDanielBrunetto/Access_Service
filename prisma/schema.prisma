@@ -27,21 +27,29 @@ model Business {
   token       String?  @db.Char(6)
   status      Boolean  @default(true)
 
-  phones Phone[]
+  phones Phone_Business[]
 
   @@map("Business")
 }
 
-model Phone {
-  id           Int      @id @default(autoincrement())
-  user_type    UserType
+model Phone_Business {
+  id           Int    @id @default(autoincrement())
   user_id      Int
-  phone_number String   @unique @db.VarChar(255)
+  phone_number String @unique @db.VarChar(12)
 
   business Business? @relation(fields: [user_id], references: [id], map: "fk_phone_business")
-  worker   Worker?   @relation(fields: [user_id], references: [id], map: "fk_phone_worker")
 
-  @@map("Phone")
+  @@map("Phone_Business")
+}
+
+model Phone_Worker {
+  id           Int    @id @default(autoincrement())
+  user_id      Int
+  phone_number String @unique @db.VarChar(12)
+
+  worker Worker? @relation(fields: [user_id], references: [id], map: "fk_phone_worker")
+
+  @@map("Phone_Worker")
 }
 
 model Worker {
@@ -55,7 +63,7 @@ model Worker {
   expires_in   DateTime?
   dismissed_in DateTime?
 
-  phones Phone[]
+  phones Phone_Worker[]
 
   @@map("Worker")
 }
@@ -63,9 +71,4 @@ model Worker {
 enum TypeDoc {
   CPF
   CNPJ
-}
-
-enum UserType {
-  business
-  worker
 }
