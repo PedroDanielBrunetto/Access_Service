@@ -7,6 +7,6 @@ const routes = Router();
 
 routes.use("/business", accountsRouter);
 routes.use("/business-forgot-password", resetPasswordRouter);
-routes.use("/business-login", businessSession);
+routes.use("/business-session", businessSession);
 
 export default routes;

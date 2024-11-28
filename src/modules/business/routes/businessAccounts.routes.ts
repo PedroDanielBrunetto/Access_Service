@@ -56,9 +56,13 @@ businessAccountsRouter.post("/phones", validateAddPhones, (req, res, next) => {
 });
 
 // Remove Business Phones Number
-businessAccountsRouter.delete("/phones/:id", (req, res, next) => {
-  accountController.deletePhones(req, res).catch(next);
-});
+businessAccountsRouter.delete(
+  "/phones/:id",
+  isAuthenticated,
+  (req, res, next) => {
+    accountController.deletePhones(req, res).catch(next);
+  }
+);
 
 // Update Avatar Business Account
 businessAccountsRouter.post(
