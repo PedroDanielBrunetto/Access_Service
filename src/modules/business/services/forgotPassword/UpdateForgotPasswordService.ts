@@ -29,6 +29,7 @@ class UpdateForgotPasswordService {
       where: { public_id },
       data: {
         password,
+        token: null,
         updated_at: new Date(),
       },
     });
