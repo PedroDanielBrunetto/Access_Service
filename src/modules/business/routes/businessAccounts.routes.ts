@@ -52,7 +52,12 @@ businessAccountsRouter.patch(
 
 // Add Business Phones Number
 businessAccountsRouter.post("/phones", validateAddPhones, (req, res, next) => {
-  accountController.phones(req, res).catch(next);
+  accountController.createPhones(req, res).catch(next);
+});
+
+// Remove Business Phones Number
+businessAccountsRouter.delete("/phones/:id", (req, res, next) => {
+  accountController.deletePhones(req, res).catch(next);
 });
 
 // Update Avatar Business Account

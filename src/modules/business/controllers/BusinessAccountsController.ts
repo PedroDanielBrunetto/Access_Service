@@ -11,6 +11,7 @@ import AddPhonesBusinessService from "../services/phone/AddPhonesBusinessService
 import { ICreateAccountBusinessRequest } from "../interfaces/req/ICreateAccountBusinessRequest";
 import { IUpdateAccountBusinessRequest } from "../interfaces/req/IUpdateAccountBusinessRequest";
 import { IAddPhonesBusinessRequest } from "../interfaces/req/IAddPhonesBusinessRequest";
+import DeletePhonesBusinessService from "../services/phone/DeletePhonesBusinessService";
 
 export default class BusinessAccountsController {
   public async create(request: Request, response: Response): Promise<void> {
@@ -33,7 +34,10 @@ export default class BusinessAccountsController {
     response.json(business);
   }
 
-  public async phones(request: Request, response: Response): Promise<void> {
+  public async createPhones(
+    request: Request,
+    response: Response
+  ): Promise<void> {
     const addPhonesBusiness = new AddPhonesBusinessService();
 
     await addPhonesBusiness.execute(request.body as IAddPhonesBusinessRequest);
@@ -41,11 +45,24 @@ export default class BusinessAccountsController {
     response.json("Números adicionados com sucesso.");
   }
 
-  public async avatar(req: Request, res: Response): Promise<Response> {
-    const { id: public_id } = req.params;
-    const avatarFile = req.file?.buffer;
-    const fileName = req.file?.originalname;
-    const contentType = req.file?.mimetype;
+  public async deletePhones(
+    request: Request,
+    response: Response
+  ): Promise<void> {
+    const { id: id_phone_number } = request.params;
+
+    const deletePhonesBusiness = new DeletePhonesBusinessService();
+
+    await deletePhonesBusiness.execute(Number(id_phone_number));
+
+    response.json("Telefone removido com sucesso.");
+  }
+
+  public async avatar(request: Request, response: Response): Promise<Response> {
+    const { id: public_id } = request.params;
+    const avatarFile = request.file?.buffer;
+    const fileName = request.file?.originalname;
+    const contentType = request.file?.mimetype;
 
     if (!avatarFile || !fileName || !contentType)
       throw new AppError("Arquivo obrigatório.", 400);
@@ -60,7 +77,7 @@ export default class BusinessAccountsController {
         contentType,
       });
 
-      return res.json({ avatarUrl });
+      return response.json({ avatarUrl });
     } catch (error: any) {
       throw new AppError(error.message, 400);
     }
